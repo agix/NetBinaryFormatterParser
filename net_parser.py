@@ -29,11 +29,16 @@ def parse_values(objectID, s):
 
 def LengthPrefixedString(s, options=""):
     Length = 0
-    byte = 128
-    while byte&128:
-        Length = Length << 8
+    shift = 0
+    c = True
+    while c:
         byte = struct.unpack('<B', popp(s, 1))[0]
-        Length += byte
+        if byte&128:
+            byte^=128
+        else:
+            c = False
+        Length += byte<<shift
+        shift+=7
     return popp(s, Length)
 
 PrimitiveTypeEnumeration = {
