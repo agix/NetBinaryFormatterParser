@@ -9,10 +9,11 @@ def nothing(value):
     return value
 
 def date(s, options):
-    return struct.unpack(options[1], popp(s, options[0]))[0]
+    d = popp(s, options[0])
+    return d.encode("hex")
 
 def unpack_value(s, options):
-    return struct.unpack(options[1], popp(s,options[0]))[0]
+    return struct.unpack(options[1], popp(s, options[0]))[0]
 
 def printverbose(string):
     if len(sys.argv) > 2 and sys.argv[2] == '-v':
@@ -69,8 +70,8 @@ def parse_values(objectID, s):
     a = 0
     for object in myClass[0]:
         printverbose(myClass[1][a]+' : '+object[0])
+        values.append((myClass[1][a]+' : '+object[0], parse_value(object, s)))
         a+=1
-        values.append(parse_value(object, s))
     return values
 
 
@@ -105,14 +106,14 @@ def ClassTypeInfo(s):
 
 
 BinaryTypeEnumeration = {
-0:('Primitive', Primitive),
-1:('String', none),
-2:('Object', none),
-3:('SystemClass', SystemClass),
-4:('Class', ClassTypeInfo),
-5:('ObjectArray', none),
-6:('StringArray', none),
-7:('PrimitiveArray', Primitive)
+0:['Primitive', Primitive],
+1:['String', none],
+2:['Object', none],
+3:['SystemClass', SystemClass],
+4:['Class', ClassTypeInfo],
+5:['ObjectArray', none],
+6:['StringArray', none],
+7:['PrimitiveArray', Primitive]
 }
 
 
@@ -167,7 +168,7 @@ def MemberTypeInfo(s, c):
         binaryTypeEnums.append(binaryTypeEnum)
         BinaryTypeEnums.append(binaryTypeEnum[0])
     for i in binaryTypeEnums:
-        if i[0] == 'Primitive':
+        if i[0] == 'Primitive' or i[0] == 'PrimitiveArray':
             AdditionalInfos.append((i[0],i[1](s)[0]))
         else:
             AdditionalInfos.append((i[0],i[1](s)))
@@ -237,15 +238,16 @@ def SystemClassWithMembersAndTypes(s):
 def BinaryArray(s):
     binaryArray = {}
     ObjectId = struct.unpack('<I', popp(s, 4))[0]
-    BinaryArrayTypeEnum = BinaryArrayTypeEnumeration[struct.unpack('<B', popp(s, 1))[0]]
+    BinaryArrayTypeEnum = BinaryArrayTypeEnumeration[struct.unpack('<B', popp(s, 1))[0]][0]
     Rank = struct.unpack('<I', popp(s, 4))[0]
     Lengths = []
     LowerBounds = []
     for i in range(Rank):
         Lengths.append(struct.unpack('<I', popp(s, 4))[0])
-    if Rank>1:
+    if 'Offset' in BinaryArrayTypeEnum:
         for i in range(Rank):
             LowerBounds.append(struct.unpack('<I', popp(s, 4))[0])
+        binaryArray['LowerBounds'] = LowerBounds
     TypeEnum = BinaryTypeEnumeration[struct.unpack('<B', popp(s, 1))[0]]
     AdditionalTypeInfo = TypeEnum[1](s)
     printverbose('\tObjectId : 0x%x'%ObjectId)
@@ -260,7 +262,6 @@ def BinaryArray(s):
     binaryArray['BinaryArrayTypeEnum'] = BinaryArrayTypeEnum
     binaryArray['Rank'] = Rank
     binaryArray['Lengths'] = Lengths
-    binaryArray['LowerBounds'] = LowerBounds
     binaryArray['TypeEnum'] = TypeEnum[0]
     binaryArray['AdditionalTypeInfo'] = AdditionalTypeInfo
     return binaryArray
