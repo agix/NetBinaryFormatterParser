@@ -8,20 +8,24 @@ def LengthPrefixedString(string, options=''):
     ret = ''
     Length = struct.pack('<I', len(string))
     newLength = ''
-    for i in range(len(Length)-1, -1, -1):
-        if Length[i]=='\x00':
-            continue
-        else:
-            newLength = newLength+Length[:i+1]
-            break
+    if len(string)>128:
+        ret = '\x80\x08'
+    else :
+        for i in range(len(Length)-1, -1, -1):
+            if Length[i]=='\x00':
+                continue
+            else:
+                newLength = newLength+Length[:i+1]
+                break
 
-    for l in newLength:
-        if ord(l)&128:
-            ret += chr(ord(l)^128)
-        else:
-            ret += l
-    if len(ret)==0:
-        ret = '\x00'
+        for l in newLength:
+            if ord(l)&128:
+                ret += chr(ord(l)^128)
+            else:
+                ret += l
+        if len(ret)==0:
+            ret = '\x00'
+
     ret += str(string)
     return ret
 
@@ -124,6 +128,15 @@ def ClassWithMembersAndTypes(s):
     ret += parse_values(s['Values'], s['MemberTypeInfo'], s['ClassInfo']['MemberCount'])
     return ret
 
+def SystemClassWithMembersAndTypes(s):
+    global myClasses
+    ret = ''
+    ret += ClassInfo(s['ClassInfo'])
+    ret += MemberTypeInfo(s['MemberTypeInfo'], s['ClassInfo']['MemberCount'])
+    myClasses[s['ClassInfo']['ObjectId']]={'Name': s['ClassInfo']['Name'], 'MemberTypeInfo': s['MemberTypeInfo'], 'MemberCount': s['ClassInfo']['MemberCount']}
+    ret += parse_values(s['Values'], s['MemberTypeInfo'], s['ClassInfo']['MemberCount'])
+    return ret
+
 def MemberReference(s):
     return struct.pack('<I', s['IdRef'])
 
@@ -175,23 +188,14 @@ def ClassWithId(s):
     ret += parse_values(s['Values'], theclass['MemberTypeInfo'], theclass['MemberCount'])
     return ret
 
-def ArraySinglePrimitive(s):
-    arraySinglePrimitive = {}
-    ObjectId = struct.unpack('<I', popp(s, 4))[0]
-    Length = struct.unpack('<I', popp(s, 4))[0]
-    printverbose('\tObjectId : 0x%x'%ObjectId)
-    printverbose('\tLength : 0x%x'%Length)
-    primitive = Primitive(s)
-    printverbose('\t'+primitive[0])
-    arraySinglePrimitive['ObjectId'] = ObjectId
-    arraySinglePrimitive['Length'] = Length
-    arraySinglePrimitive['PrimitiveTypeEnum'] = primitive[0]
-    arraySinglePrimitive['Values'] = []
-    for o in range(Length):
-        value = primitive[1](s, primitive[2])
-        printverbose(value)
-        arraySinglePrimitive['Values'].append(value)
-    return arraySinglePrimitive
+def ArraySingleObject(s):
+
+    ret = ''
+    ret += struct.pack('<I', s['ObjectId'])
+    ret += struct.pack('<I', s['Length'])
+    for o in range(s['Length']):
+        ret +=parse_value(s['Values'][o], '', '')
+    return ret
 
 def ArraySinglePrimitive(s):
     ret = ''
@@ -202,17 +206,33 @@ def ArraySinglePrimitive(s):
         ret += PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][1](s['Values'][o], PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][2])
     return ret
 
+def MemberPrimitiveTyped(s):
+    memberPrimitiveTyped = {}
+    primitive = Primitive(s)
+    printverbose('\t'+primitive[0])
+    value = primitive[1](s, primitive[2])
+    printverbose(value)
+    memberPrimitiveTyped['PrimitiveTypeEnum'] = primitive[0]
+    memberPrimitiveTyped['Value'] = value
+    return memberPrimitiveTyped
+
+def MemberPrimitiveTyped(s):
+    ret = ''
+    ret += struct.pack('<B', PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][0])
+    ret += PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][1](s['Value'], PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][2])
+    return ret
+
 
 RecordTypeEnum = {
 'SerializedStreamHeader':[0, SerializedStreamHeader],
 'ClassWithId':[1, ClassWithId],
 'SystemClassWithMembers':[2, ],
 'ClassWithMembers':[3, ],
-'SystemClassWithMembersAndTypes':[4, ],
+'SystemClassWithMembersAndTypes':[4, SystemClassWithMembersAndTypes],
 'ClassWithMembersAndTypes':[5, ClassWithMembersAndTypes],
 'BinaryObjectString':[6, BinaryObjectString],
 'BinaryArray':[7, BinaryArray],
-'MemberPrimitiveTyped':[8, ],
+'MemberPrimitiveTyped':[8, MemberPrimitiveTyped],
 'MemberReference':[9, MemberReference],
 'ObjectNull':[10, none],
 'MessageEnd':[11, none],
@@ -220,7 +240,7 @@ RecordTypeEnum = {
 'ObjectNullMultiple256':[13, ],
 'ObjectNullMultiple':[14, ],
 'ArraySinglePrimitive':[15, ArraySinglePrimitive],
-'ArraySingleObject':[16, ],
+'ArraySingleObject':[16, ArraySingleObject],
 'ArraySingleString':[17, ],
 'MethodCall':[21],
 'MethodReturn':[22]
