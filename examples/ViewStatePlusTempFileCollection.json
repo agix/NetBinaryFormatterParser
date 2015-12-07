@@ -1,0 +1,69 @@
+{
+    "Token_Pair": [
+        {
+            "Token_Pair": [
+                {
+                    "Token_String": "2076180736"
+                },
+                {
+                    "Token_Pair": [
+                        {
+                            "Token_Null": null
+                        },
+                        {
+                            "Token_ArrayList": [
+                                {
+                                    "Token_Int32": 3
+                                },
+                                {
+                                    "Token_Pair": [
+                                        {
+                                            "Token_Null": null
+                                        },
+                                        {
+                                            "Token_ArrayList": [
+                                                {
+                                                    "Token_Int32": 5
+                                                },
+                                                {
+                                                    "Token_Pair": [
+                                                        {
+                                                            "Token_Pair": [
+                                                                {
+                                                                    "Token_ArrayList": [
+                                                                        {
+                                                                            "Token_IndexedStringAdd": "Text"
+                                                                        },
+                                                                        {
+                                                                            "Token_String": "test"
+                                                                        },
+                                                                        {
+                                                                            "Token_BinarySerialized": "AAEAAAD/////AQAAAAAAAAAMAgAAAAZTeXN0ZW0FAQAAACpTeXN0ZW0uQ29kZURvbS5Db21waWxlci5UZW1wRmlsZUNvbGxlY3Rpb24EAAAACGJhc2VQYXRoB3RlbXBEaXIJa2VlcEZpbGVzBWZpbGVzAQEAAwEcU3lzdGVtLkNvbGxlY3Rpb25zLkhhc2h0YWJsZQIAAAAKBgMAAAALRDovdG1wUmFua3MACQQAAAAEBAAAABxTeXN0ZW0uQ29sbGVjdGlvbnMuSGFzaHRhYmxlBgAAAApMb2FkRmFjdG9yB1ZlcnNpb24LS2V5Q29tcGFyZXIISGFzaFNpemUES2V5cwZWYWx1ZXMAAAMABQULCBZTeXN0ZW0uT3JkaW5hbENvbXBhcmVyCOxROD8BAAAACQUAAAADAAAACQYAAAAJBwAAAAQFAAAAFlN5c3RlbS5PcmRpbmFsQ29tcGFyZXIBAAAAC19pZ25vcmVDYXNlAAEBEAYAAAABAAAABggAAAAUXFwxOTIuMTY4Ljc5LjY3XHlvbG8QBwAAAAEAAAAIAQAL"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "Token_Null": null
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "Token_Null": null
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Token_Null": null
+        }
+    ]
+}

