@@ -351,12 +351,69 @@ def ArraySingleString(s):
     arraySingleString['Length'] = Length
     arraySingleString['Values'] = []
     for o in range(Length):
-        value = LengthPrefixedString(s)
-        printverbose('\t\t'+value)
+        value = parse_object(s)
         arraySingleString['Values'].append(value)
     return arraySingleString
 
+def MethodCall(s):
+    methodCall = {}
+    MessageEnum = struct.unpack('<I', popp(s, 4))[0]
+    MethodName = StringValueWithCode(s)
+    TypeName = StringValueWithCode(s)
+    methodCall['MessageEnum'] = MessageEnum
+    methodCall['MethodName'] = MethodName
+    methodCall['TypeName'] = TypeName
+    printverbose('\tMessageEnum : 0x%x'%MessageEnum)
+    printverbose('\tMethodName : %s'%MethodName)
+    printverbose('\tTypeName : %s'%TypeName)
 
+    if MessageEnum & MessageFlagsEnum['NoContext'] == 0:
+        CallContext = StringValueWithCode(s)
+        printverbose('\tCallContext : %s'%CallContext)
+        methodCall['CallContext'] = CallContext
+
+    if MessageEnum & MessageFlagsEnum['NoArgs'] == 0:
+        Args = ArrayOfValueWithCode(s)
+        printverbose('\tArgs : %s'%Args)
+        methodCall['Args'] = Args
+
+    return methodCall
+
+def ArrayOfValueWithCode(s):
+    arrayOfValueWithCode = {}
+    arrayOfValueWithCode['Length'] = struct.unpack('<I', popp(s, 4))[0]
+    arrayOfValueWithCode['ListOfValueWithCode'] = []
+
+    for v in range(arrayOfValueWithCode['Length']):
+        value = {}
+        PrimitiveEnum = struct.unpack('<B', popp(s, 1))[0]
+        value['PrimitiveTypeEnum'] = PrimitiveTypeEnumeration[PrimitiveEnum][0]
+        value['Value'] = PrimitiveTypeEnumeration[PrimitiveEnum][1](s, PrimitiveTypeEnumeration[PrimitiveEnum][2])
+        arrayOfValueWithCode['ListOfValueWithCode'].append(value)
+    return arrayOfValueWithCode
+
+
+def StringValueWithCode(s):
+    struct.unpack('<B', popp(s, 1))[0]
+    return LengthPrefixedString(s)
+
+MessageFlagsEnum = {
+    'NoArgs': 0x00000001,
+    'ArgsInline': 0x00000002,
+    'ArgsIsArray': 0x00000004,
+    'ArgsInArray': 0x00000008,
+    'NoContext': 0x00000010,
+    'ContextInline': 0x00000020,
+    'ContextInArray': 0x00000040,
+    'MethodSignatureInArray': 0x00000080,
+    'PropertiesInArray': 0x00000100,
+    'NoReturnValue': 0x00000200,
+    'ReturnValueVoid': 0x00000400,
+    'ReturnValueInline': 0x00000800,
+    'ReturnValueInArray': 0x00001000,
+    'ExceptionInArray': 0x00002000,
+    'GenericMethod': 0x00008000
+}
 
 RecordTypeEnum = {
 0:['SerializedStreamHeader', SerializedStreamHeader],
@@ -377,7 +434,7 @@ RecordTypeEnum = {
 15:['ArraySinglePrimitive', ArraySinglePrimitive],
 16:['ArraySingleObject', ArraySingleObject],
 17:['ArraySingleString', ArraySingleString],
-21:['MethodCall'],
+21:['MethodCall', MethodCall],
 22:['MethodReturn']
 }
 

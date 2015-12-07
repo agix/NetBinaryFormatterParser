@@ -189,12 +189,19 @@ def ClassWithId(s):
     return ret
 
 def ArraySingleObject(s):
-
     ret = ''
     ret += struct.pack('<I', s['ObjectId'])
     ret += struct.pack('<I', s['Length'])
     for o in range(s['Length']):
-        ret +=parse_value(s['Values'][o], '', '')
+        ret += parse_value(s['Values'][o], '', '')
+    return ret
+
+def ArraySingleString(s):
+    ret = ''
+    ret += struct.pack('<I', s['ObjectId'])
+    ret += struct.pack('<I', s['Length'])
+    for o in range(s['Length']):
+        ret += parse_value(s['Values'][o], '', '')
     return ret
 
 def ArraySinglePrimitive(s):
@@ -222,6 +229,60 @@ def MemberPrimitiveTyped(s):
     ret += PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][1](s['Value'], PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][2])
     return ret
 
+def MethodCall(s):
+    ret = ''
+    ret += struct.pack('<I', s['MessageEnum'])
+    ret += StringValueWithCode(s['MethodName'])
+    ret += StringValueWithCode(s['TypeName'])
+    if s['MessageEnum'] & MessageFlagsEnum['NoContext'] == 0:
+        ret += StringValueWithCode(s['CallContext'])
+    if s['MessageEnum'] & MessageFlagsEnum['NoArgs'] == 0:
+        ret += ArrayOfValueWithCode(s['Args'])
+    return ret
+
+def MethodReturn(s):
+    ret = ''
+    ret += struct.pack('<I', s['MessageEnum'])
+    ret += StringValueWithCode(s['MethodName'])
+    ret += StringValueWithCode(s['TypeName'])
+    if s['MessageEnum'] & MessageFlagsEnum['NoContext'] == 0:
+        ret += StringValueWithCode(s['CallContext'])
+    if s['MessageEnum'] & MessageFlagsEnum['NoArgs'] == 0:
+        ret += ArrayOfValueWithCode(s['Args'])
+    return ret
+
+def ArrayOfValueWithCode(s):
+    ret = ''
+    ret += struct.pack('<I', s['Length'])
+    for v in s['ListOfValueWithCode']:
+        ret += struct.pack('<B', PrimitiveTypeEnumeration[v['PrimitiveTypeEnum']][0])
+        ret += PrimitiveTypeEnumeration[v['PrimitiveTypeEnum']][1](v['Value'], PrimitiveTypeEnumeration[v['PrimitiveTypeEnum']][2])
+    return ret
+
+def StringValueWithCode(s):
+    ret = ''
+    ret += struct.pack('<B', PrimitiveTypeEnumeration['String'][0])
+    ret += LengthPrefixedString(s)
+    return ret
+
+
+MessageFlagsEnum = {
+    'NoArgs': 0x00000001,
+    'ArgsInline': 0x00000002,
+    'ArgsIsArray': 0x00000004,
+    'ArgsInArray': 0x00000008,
+    'NoContext': 0x00000010,
+    'ContextInline': 0x00000020,
+    'ContextInArray': 0x00000040,
+    'MethodSignatureInArray': 0x00000080,
+    'PropertiesInArray': 0x00000100,
+    'NoReturnValue': 0x00000200,
+    'ReturnValueVoid': 0x00000400,
+    'ReturnValueInline': 0x00000800,
+    'ReturnValueInArray': 0x00001000,
+    'ExceptionInArray': 0x00002000,
+    'GenericMethod': 0x00008000
+}
 
 RecordTypeEnum = {
 'SerializedStreamHeader':[0, SerializedStreamHeader],
@@ -241,9 +302,9 @@ RecordTypeEnum = {
 'ObjectNullMultiple':[14, ],
 'ArraySinglePrimitive':[15, ArraySinglePrimitive],
 'ArraySingleObject':[16, ArraySingleObject],
-'ArraySingleString':[17, ],
-'MethodCall':[21],
-'MethodReturn':[22]
+'ArraySingleString':[17, ArraySingleString],
+'MethodCall':[21, MethodCall],
+'MethodReturn':[22, MethodReturn]
 }
 
 if len(sys.argv) < 2:
