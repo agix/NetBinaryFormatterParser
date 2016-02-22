@@ -62,7 +62,8 @@ def Token_IndexedString(s):
     return StringList[index]
 
 def Token_IndexedStringAdd(s):
-    StringList.append(Token_String(s))
+    string = Token_String(s)
+    StringList.append(string)
     return StringList[-1]
 
 def Token_ArrayList(s):
@@ -98,11 +99,14 @@ TypeList = []
 def Token_Type(s):
     token = struct.unpack('<B',popp(s,1))[0]
     printverbose(TokenEnum[token][0])
-    return RecordTypeEnum[RecordType][1](s)
+    return TokenEnum[token][1](s)
 
 def Token_TypeRef(s):
     index = Length(s)
-    return TypeList[index]
+    try:
+        return TypeList[index]
+    except:
+        return "TypeList[%d]"%index
 
 def Token_TypeRefAdd(s):
     TypeList.append(Token_String(s))
@@ -121,7 +125,7 @@ def Token_Array(s):
     array = []
     for i in range(count):
         array.append(DeserializeValue(s))
-    return array
+    return {'type': type, 'array':array}
 
 def Token_IntEnum(s):
     value = {}
