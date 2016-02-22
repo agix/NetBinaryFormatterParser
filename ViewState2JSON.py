@@ -161,6 +161,13 @@ def Token_StringFormatted(s):
 def Token_BinarySerialized(s):
     return b64encode(LengthPrefixedString(s))
 
+def Token_HybridDictionary(s):
+    count = Length(s)
+    array = []
+    for i in range(count):
+        array.append({'Key': DeserializeValue(s), 'Value': DeserializeValue(s)})
+    return array
+
 TokenEnum = {
 1:['Token_Int16', Token_Int16],
 2:['Token_Int32', Token_Int32],
@@ -180,7 +187,7 @@ TokenEnum = {
 21:['Token_StringArray', Token_StringArray],
 22:['Token_ArrayList', Token_ArrayList],
 23:['Token_Hashtable', Token_ArrayList],
-24:['Token_HybridDictionary', Token_ArrayList],
+24:['Token_HybridDictionary', Token_HybridDictionary],
 25:['Token_Type', Token_Type],
 27:['Token_Unit', Token_Unit],
 28:['Token_EmptyUnit', Token_EmptyUnit],
@@ -230,3 +237,6 @@ f.close()
 myObject = Deserialize(stream)
 
 print json.dumps(myObject)
+
+if len(stream) > 0:
+    print ''.join(stream).encode("hex")
