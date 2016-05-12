@@ -335,10 +335,18 @@ def ArraySinglePrimitive(s):
     arraySinglePrimitive['Length'] = Length
     arraySinglePrimitive['PrimitiveTypeEnum'] = primitive[0]
     arraySinglePrimitive['Values'] = []
-    for o in range(Length):
-        value = primitive[1](s, primitive[2])
-        printverbose(value)
-        arraySinglePrimitive['Values'].append(value)
+    if primitive[0] != 'Byte':
+        for o in range(Length):
+            value = primitive[1](s, primitive[2])
+            printverbose(value)
+            arraySinglePrimitive['Values'].append(value)
+    else:
+        buf = ''.join(s)
+        f = open('objectID_%d'%ObjectId, 'w')
+        f.write(buf[:Length])
+        f.close()
+        s.__delslice__(0,Length)
+        arraySinglePrimitive['Values'] = '@objectID_%d'%ObjectId
     return arraySinglePrimitive
 
 def ArraySingleString(s):
@@ -434,6 +442,7 @@ RecordTypeEnum = {
 15:['ArraySinglePrimitive', ArraySinglePrimitive],
 16:['ArraySingleObject', ArraySingleObject],
 17:['ArraySingleString', ArraySingleString],
+20:['ArrayOfType', ArraySingleString],
 21:['MethodCall', MethodCall],
 22:['MethodReturn']
 }
@@ -465,5 +474,7 @@ while(len(stream)!=0):
     a = parse_object(stream)
     myObject[z] = a
     z+=1
+    if a[0] == 'MessageEnd':
+        break
 
 print json.dumps(myObject)

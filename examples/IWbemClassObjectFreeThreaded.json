@@ -1,0 +1,196 @@
+{
+    "0": [
+        "SerializedStreamHeader",
+        {
+            "HeaderId": 4294967295,
+            "MajorVersion": 1,
+            "MinorVersion": 0,
+            "RootId": 1
+        }
+    ],
+    "1": [
+        "BinaryLibrary",
+        {
+            "LibraryId": 2,
+            "LibraryName": "System.Management"
+        }
+    ],
+    "2": [
+        "ClassWithMembersAndTypes",
+        {
+            "ClassInfo": {
+                "MemberCount": 1,
+                "MemberNames": [
+                    "flatWbemClassObject"
+                ],
+                "Name": "System.Management.IWbemClassObjectFreeThreaded",
+                "ObjectId": 1
+            },
+            "LibraryId": 2,
+            "MemberTypeInfo": {
+                "AdditionalInfos": [
+                    [
+                        "PrimitiveArray",
+                        "Byte"
+                    ]
+                ],
+                "BinaryTypeEnums": [
+                    "PrimitiveArray"
+                ]
+            },
+            "Values": [
+                [
+                    "flatWbemClassObject : PrimitiveArray",
+                    [
+                        "MemberReference",
+                        {
+                            "IdRef": 3
+                        }
+                    ]
+                ]
+            ]
+        }
+    ],
+    "3": [
+        "ArraySinglePrimitive",
+        {
+            "Length": 128,
+            "ObjectId": 3,
+            "PrimitiveTypeEnum": "Byte",
+            "Values": [
+                77,
+                69,
+                79,
+                87,
+                4,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                192,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                70,
+                54,
+                3,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                192,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                70,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                86,
+                89,
+                83,
+                78,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                192,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                70,
+                89,
+                79,
+                76,
+                79,
+                97,
+                97,
+                97,
+                97,
+                97,
+                97,
+                97,
+                97,
+                98,
+                98,
+                98,
+                98,
+                98,
+                98,
+                98,
+                98,
+                97,
+                97,
+                97,
+                97,
+                97,
+                97,
+                97,
+                97,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                101,
+                101,
+                101,
+                101,
+                101,
+                101,
+                101,
+                101,
+                102,
+                102,
+                102,
+                102,
+                102,
+                102,
+                102,
+                102,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64
+            ]
+        }
+    ],
+    "4": [
+        "MessageEnd",
+        null
+    ]
+}

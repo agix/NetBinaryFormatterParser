@@ -1,0 +1,70 @@
+{
+    "0": [
+        "SerializedStreamHeader",
+        {
+            "HeaderId": 4294967295,
+            "MajorVersion": 1,
+            "MinorVersion": 0,
+            "RootId": 1
+        }
+    ],
+    "1": [
+        "BinaryLibrary",
+        {
+            "LibraryId": 2,
+            "LibraryName": "System.Drawing"
+        }
+    ],
+    "2": [
+        "ClassWithMembersAndTypes",
+        {
+            "ClassInfo": {
+                "MemberCount": 1,
+                "MemberNames": [
+                    "Data"
+                ],
+                "Name": "System.Drawing.Bitmap",
+                "ObjectId": 1
+            },
+            "LibraryId": 2,
+            "MemberTypeInfo": {
+                "AdditionalInfos": [
+                    [
+                        "PrimitiveArray",
+                        "Byte"
+                    ]
+                ],
+                "BinaryTypeEnums": [
+                    "PrimitiveArray"
+                ]
+            },
+            "Values": [
+                [
+                    "flatWbemClassObject : PrimitiveArray",
+                    [
+                        "MemberReference",
+                        {
+                            "IdRef": 3
+                        }
+                    ]
+                ]
+            ]
+        }
+    ],
+    "3": [
+        "ArraySinglePrimitive",
+        {
+            "Length": 2,
+            "ObjectId": 3,
+            "PrimitiveTypeEnum": "Byte",
+            "Values": [
+                66,
+                77
+            ]
+        }
+    ],
+    "4": [
+        "MessageEnd",
+        null
+    ]
+}

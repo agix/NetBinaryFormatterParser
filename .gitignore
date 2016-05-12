@@ -1,1 +1,4 @@
 tests
+sploit
+*.pyc
+examples/*_binary*

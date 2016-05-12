@@ -4,29 +4,18 @@ import struct
 
 myClasses = {}
 
-def LengthPrefixedString(string, options=''):
+def Length(string):
+    value = len(string)
     ret = ''
-    Length = struct.pack('<I', len(string))
-    newLength = ''
-    if len(string)>128:
-        ret = '\x80\x08'
-    else :
-        for i in range(len(Length)-1, -1, -1):
-            if Length[i]=='\x00':
-                continue
-            else:
-                newLength = newLength+Length[:i+1]
-                break
+    while value >= 0x80:
+        ret += chr((value | 0x80)&0xff)
+        value >>= 7
+    ret += chr(value)
 
-        for l in newLength:
-            if ord(l)&128:
-                ret += chr(ord(l)^128)
-            else:
-                ret += l
-        if len(ret)==0:
-            ret = '\x00'
+    return ret
 
-    ret += str(string)
+def LengthPrefixedString(string, options=''):
+    ret = Length(string)+str(string)
     return ret
 
 def ClassInfo(s):
@@ -50,7 +39,7 @@ def none(s):
 
 PrimitiveTypeEnumeration = {
 'Boolean':[1,pack_value, [1, '<B']],
-'Byte':[2, pack_value, [1, '<b']],
+'Byte':[2, pack_value, [1, '<B']],
 'Char':[3, pack_value, [1, '<b']],
 'Decimal':[5, LengthPrefixedString, 0],
 'Double':[6, pack_value, [8, '<Q']],
@@ -213,6 +202,14 @@ def ArraySinglePrimitive(s):
         ret += PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][1](s['Values'][o], PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][2])
     return ret
 
+def ArraySinglePrimitiveBig(s):
+    ret = ''
+    ret += struct.pack('<I', s['ObjectId'])
+    ret += struct.pack('<I', s['Length'])
+    ret += struct.pack('<B', PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][0])
+    ret += s['Values']
+    return ret
+
 def MemberPrimitiveTyped(s):
     memberPrimitiveTyped = {}
     primitive = Primitive(s)
@@ -301,28 +298,32 @@ RecordTypeEnum = {
 'ObjectNullMultiple256':[13, ],
 'ObjectNullMultiple':[14, ],
 'ArraySinglePrimitive':[15, ArraySinglePrimitive],
+'ArraySinglePrimitiveBig':[15, ArraySinglePrimitiveBig],
 'ArraySingleObject':[16, ArraySingleObject],
 'ArraySingleString':[17, ArraySingleString],
 'MethodCall':[21, MethodCall],
 'MethodReturn':[22, MethodReturn]
 }
 
-if len(sys.argv) < 2:
-    print "Usage: %s <stream>"%sys.argv[0]
-    sys.exit(0)
 
-f=open(sys.argv[1])
-myObject = json.loads(f.read())
-f.close()
 
-binary = ''
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print "Usage: %s <stream>"%sys.argv[0]
+        sys.exit(0)
 
-for o in range(len(myObject)):
-    RecordType = RecordTypeEnum[myObject[str(o)][0]]
-    print myObject[str(o)][0]
-    binary += struct.pack('<B', RecordType[0])
-    binary += RecordType[1](myObject[str(o)][1])
+    f=open(sys.argv[1])
+    myObject = json.loads(f.read())
+    f.close()
 
-f = open(sys.argv[1]+'_binary', 'w')
-f.write(binary)
-f.close()
+    binary = ''
+
+    for o in range(len(myObject)):
+        RecordType = RecordTypeEnum[myObject[str(o)][0]]
+        print myObject[str(o)][0]
+        binary += struct.pack('<B', RecordType[0])
+        binary += RecordType[1](myObject[str(o)][1])
+
+    f = open(sys.argv[1]+'_binary', 'w')
+    f.write(binary)
+    f.close()

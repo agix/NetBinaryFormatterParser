@@ -1,0 +1,88 @@
+{
+    "0": [
+        "SerializedStreamHeader",
+        {
+            "HeaderId": 4294967295,
+            "MajorVersion": 1,
+            "MinorVersion": 0,
+            "RootId": 1
+        }
+    ],
+    "1": [
+        "BinaryLibrary",
+        {
+            "LibraryId": 2,
+            "LibraryName": "System"
+        }
+    ],
+    "2": [
+        "SystemClassWithMembersAndTypes",
+        {
+            "ClassInfo": {
+                "MemberCount": 2,
+                "MemberNames": [
+                    "HashValue",
+                    "HashAlgorithm"
+                ],
+                "Name": "System.Security.Policy.HashMembershipCondition",
+                "ObjectId": 1
+            },
+            "MemberTypeInfo": {
+                "AdditionalInfos": [
+                    [
+                        "PrimitiveArray",
+                        "Byte"
+                    ],
+                    [
+                        "String",
+                        null
+                    ]
+                ],
+                "BinaryTypeEnums": [
+                    "PrimitiveArray",
+                    "String"
+                ]
+            },
+            "Values": [
+                [
+                    "HashValue : PrimitiveArray",
+                    [
+                        "MemberReference",
+                        {
+                            "IdRef": 3
+                        }
+                    ]
+                ],
+                [
+                    "HashAlgorithm : String",
+                    [
+                        "BinaryObjectString",
+                        {
+                            "ObjectId": 4,
+                            "Value": "Deserialize.PrintHello, Deserialize2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                        }
+                    ]
+                ]
+            ]
+        }
+    ],
+    "3": [
+        "ArraySinglePrimitive",
+        {
+            "Length": 5,
+            "ObjectId": 3,
+            "PrimitiveTypeEnum": "Byte",
+            "Values": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        }
+    ],
+    "4": [
+        "MessageEnd",
+        null
+    ]
+}
