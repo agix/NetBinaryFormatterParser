@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 import json
 import struct
@@ -15,7 +16,7 @@ def Length(string):
     return ret
 
 def LengthPrefixedString(string, options=''):
-    ret = Length(string)+str(string)
+    ret = Length(string.encode('utf8'))+string.encode('utf8')
     return ret
 
 def ClassInfo(s):
@@ -220,6 +221,16 @@ def MemberPrimitiveTyped(s):
     memberPrimitiveTyped['Value'] = value
     return memberPrimitiveTyped
 
+def ObjectNullMultiple256(s):
+    ret = ''
+    ret += struct.pack('<B', s['NullCount'])
+    return ret
+
+def ObjectNullMultiple(s):
+    ret = ''
+    ret += struct.pack('<I', s['NullCount'])
+    return ret
+
 def MemberPrimitiveTyped(s):
     ret = ''
     ret += struct.pack('<B', PrimitiveTypeEnumeration[s['PrimitiveTypeEnum']][0])
@@ -295,8 +306,8 @@ RecordTypeEnum = {
 'ObjectNull':[10, none],
 'MessageEnd':[11, none],
 'BinaryLibrary':[12, BinaryLibrary],
-'ObjectNullMultiple256':[13, ],
-'ObjectNullMultiple':[14, ],
+'ObjectNullMultiple256':[13, ObjectNullMultiple256],
+'ObjectNullMultiple':[14, ObjectNullMultiple],
 'ArraySinglePrimitive':[15, ArraySinglePrimitive],
 'ArraySinglePrimitiveBig':[15, ArraySinglePrimitiveBig],
 'ArraySingleObject':[16, ArraySingleObject],
