@@ -2,6 +2,9 @@
 import sys
 import json
 import struct
+import argparse
+import base64
+import urllib
 
 myClasses = {}
 
@@ -97,7 +100,6 @@ def parse_value(val, typeEnum, info):
         ret += PrimitiveTypeEnumeration[info[1]][1](val, PrimitiveTypeEnumeration[info[1]][2])
     else:
         RecordType = RecordTypeEnum[val[0]]
-        print val[0]
         ret += struct.pack('<B', RecordType[0])
         ret += RecordType[1](val[1])
     return ret
@@ -214,9 +216,7 @@ def ArraySinglePrimitiveBig(s):
 def MemberPrimitiveTyped(s):
     memberPrimitiveTyped = {}
     primitive = Primitive(s)
-    printverbose('\t'+primitive[0])
     value = primitive[1](s, primitive[2])
-    printverbose(value)
     memberPrimitiveTyped['PrimitiveTypeEnum'] = primitive[0]
     memberPrimitiveTyped['Value'] = value
     return memberPrimitiveTyped
@@ -319,11 +319,14 @@ RecordTypeEnum = {
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print "Usage: %s <stream>"%sys.argv[0]
-        sys.exit(0)
+    parser = argparse.ArgumentParser(description='Convert json to dotnet binary formatter')
+    parser.add_argument('-i', dest='inputFile', required=True)
+    parser.add_argument('-o', dest='outputFile', required=False)
+    parser.add_argument('-e', dest='encode', help='Url and base64 encode the output binary', required=False, action='store_true')
+    parser.add_argument('-v', dest='verbose', help='Verbose mode', required=False, action='store_true')
+    args = parser.parse_args()
 
-    f=open(sys.argv[1])
+    f=open(args.inputFile)
     myObject = json.loads(f.read())
     f.close()
 
@@ -331,10 +334,17 @@ if __name__ == "__main__":
 
     for o in range(len(myObject)):
         RecordType = RecordTypeEnum[myObject[str(o)][0]]
-        print myObject[str(o)][0]
+        if args.verbose:
+            print myObject[str(o)][0]
         binary += struct.pack('<B', RecordType[0])
         binary += RecordType[1](myObject[str(o)][1])
 
-    f = open(sys.argv[1]+'_binary', 'w')
-    f.write(binary)
-    f.close()
+    if args.encode:
+        binary = urllib.quote(base64.b64encode(binary))
+
+    if args.outputFile:
+        f = open(args.outputFile, 'w')
+        f.write(binary)
+        f.close()
+    else:
+        print binary

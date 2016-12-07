@@ -2,8 +2,12 @@ import sys
 import struct
 import datetime
 import json
+import argparse
+import base64
+import urllib
 
 theClass = {}
+verbose = False
 
 def nothing(value):
     return value
@@ -16,7 +20,8 @@ def unpack_value(s, options):
     return struct.unpack(options[1], popp(s, options[0]))[0]
 
 def printverbose(string):
-    if len(sys.argv) > 2 and sys.argv[2] == '-v':
+    global verbose
+    if verbose:
         print string
 
 def LengthPrefixedString(s, options=""):
@@ -460,12 +465,20 @@ def parse_object(s):
     return (RecordTypeEnum[RecordType][0], RecordTypeEnum[RecordType][1](s))
 
 
-if len(sys.argv) < 2:
-    print "Usage: %s <stream> (-v)"%sys.argv[0]
-    sys.exit(0)
+parser = argparse.ArgumentParser(description='Convert json to dotnet binary formatter')
+parser.add_argument('-i', dest='inputFile', required=True)
+parser.add_argument('-o', dest='outputFile', required=False)
+parser.add_argument('-e', dest='encode', help='Url and base64 decode the input binary', required=False, action='store_true')
+parser.add_argument('-v', dest='verbose', help='Verbose mode', required=False, action='store_true')
+args = parser.parse_args()
 
-f=open(sys.argv[1])
-stream = list(f.read())
+verbose = args.verbose
+
+f=open(args.inputFile)
+binary = f.read()
+if args.encode:
+    binary = base64.b64decode(urllib.unquote(binary))
+stream = list(binary)
 f.close()
 
 myObject = {}
@@ -477,4 +490,9 @@ while(len(stream)!=0):
     if a[0] == 'MessageEnd':
         break
 
-print json.dumps(myObject)
+if args.outputFile:
+    f = open(args.outputFile, 'w')
+    f.write(json.dumps(myObject))
+    f.close()
+else:
+    print json.dumps(myObject)
